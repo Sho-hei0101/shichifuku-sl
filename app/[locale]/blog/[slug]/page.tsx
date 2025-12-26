@@ -34,9 +34,8 @@ type Props = {
 
 export default async function BlogPage({ params, searchParams }: Props) {
   const { locale } = await params
-
   const category = searchParams?.category
-  // 以降は既存ロジック
+  // 既存ロジック続き
 }
 
   return (
