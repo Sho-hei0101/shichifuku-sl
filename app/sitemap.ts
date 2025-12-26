@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next'
 import { locales } from '@/lib/i18n'
-import { client } from '@/lib/sanity'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://shichifuku.com'
+  const hasSanityProject = Boolean(process.env.NEXT_PUBLIC_SANITY_PROJECT_ID)
 
   // Static pages
   const staticPages = [
@@ -21,9 +21,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // Get dynamic content
-  const properties = await client.fetch(`*[_type == "property"]{ slug }`)
-  const posts = await client.fetch(`*[_type == "post"]{ slug }`)
-  const projects = await client.fetch(`*[_type == "project"]{ slug }`)
+  let properties: Array<{ slug: { current: string } }> = []
+  let posts: Array<{ slug: { current: string } }> = []
+  let projects: Array<{ slug: { current: string } }> = []
+
+  if (hasSanityProject) {
+    const { createClient } = await import('next-sanity')
+    const sanityClient = createClient({
+      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
+      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+      apiVersion: '2024-01-01',
+      useCdn: process.env.NODE_ENV === 'production',
+    })
+
+    properties = await sanityClient.fetch(`*[_type == "property"]{ slug }`)
+    posts = await sanityClient.fetch(`*[_type == "post"]{ slug }`)
+    projects = await sanityClient.fetch(`*[_type == "project"]{ slug }`)
+  }
 
   const sitemap: MetadataRoute.Sitemap = []
 
