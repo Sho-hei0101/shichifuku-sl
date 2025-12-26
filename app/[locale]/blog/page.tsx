@@ -44,12 +44,13 @@ async function getPosts(locale: Locale, category?: string) {
 
 type Props = {
   params: Promise<{ locale: Locale }>
-  searchParams?: { category?: string }
+  searchParams?: Promise<{ category?: string }>
 }
 
 export default async function BlogPage({ params, searchParams }: Props) {
   const { locale } = await params
-  const category = searchParams?.category
+  const resolvedSearchParams = await searchParams
+  const category = resolvedSearchParams?.category
   const t = translations[locale]
   const posts = await getPosts(locale, category)
 

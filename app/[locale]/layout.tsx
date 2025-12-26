@@ -15,17 +15,18 @@ export const metadata: Metadata = {
 
 type Props = {
   children: React.ReactNode
-  params: Promise<{ locale: Locale }>
+  params: Promise<{ locale: string }>
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params
+  const resolvedLocale = locale as Locale
   return (
-    <html lang={locale}>
+    <html lang={resolvedLocale}>
       <body>
-        <Header locale={locale} />
+        <Header locale={resolvedLocale} />
         <main className="pt-20 min-h-screen">{children}</main>
-        <Footer locale={locale} />
+        <Footer locale={resolvedLocale} />
       </body>
     </html>
   )
