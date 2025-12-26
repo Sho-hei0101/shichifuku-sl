@@ -28,18 +28,16 @@ async function getPost(slug: string, locale: Locale) {
 }
 
 type Props = {
-  params: Promise<{ locale: Locale; slug: string }>
+  params: Promise<{ locale: Locale }>
+  searchParams?: { category?: string }
 }
 
-export default async function BlogPostPage({ params }: Props) {
-  const { locale, slug } = await params
+export default async function BlogPage({ params, searchParams }: Props) {
+  const { locale } = await params
 
-  const t = translations[locale]
-  const post = await getPost(slug, locale)
-
-  if (!post) {
-    notFound()
-  }
+  const category = searchParams?.category
+  // 以降は既存ロジック
+}
 
   return (
     <div className="min-h-screen">
