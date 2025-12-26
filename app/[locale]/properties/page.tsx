@@ -35,9 +35,14 @@ async function getProperties(locale: Locale) {
   )
 }
 
-export default async function PropertiesPage({ params }: { params: { locale: Locale } }) {
-  const t = translations[params.locale]
-  const properties = await getProperties(params.locale)
+type Props = {
+  params: Promise<{ locale: Locale }>
+}
+
+export default async function PropertiesPage({ params }: Props) {
+  const { locale } = await params
+  const t = translations[locale]
+  const properties = await getProperties(locale)
 
   return (
     <div className="min-h-screen">
@@ -54,7 +59,7 @@ export default async function PropertiesPage({ params }: { params: { locale: Loc
             <div className="text-center py-12">
               <p className="text-xl text-gray-600 mb-8">{t.noProperties}</p>
               <Link
-                href={`/${params.locale}/contact`}
+                href={`/${locale}/contact`}
                 className="inline-block px-8 py-4 bg-black text-white rounded-full font-medium hover:bg-gray-800 transition"
               >
                 {t.contact}
@@ -65,7 +70,7 @@ export default async function PropertiesPage({ params }: { params: { locale: Loc
               {properties.map((property: any) => (
                 <Link
                   key={property._id}
-                  href={`/${params.locale}/properties/${property.slug.current}`}
+                  href={`/${locale}/properties/${property.slug.current}`}
                   className="glass rounded-2xl overflow-hidden hover:shadow-xl transition"
                 >
                   <div className="p-6">

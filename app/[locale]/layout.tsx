@@ -13,19 +13,19 @@ export const metadata: Metadata = {
   description: 'Premium B2B services in international trade, real estate, and football projects.',
 }
 
-export default function LocaleLayout({
-  children,
-  params,
-}: {
+type Props = {
   children: React.ReactNode
-  params: { locale: Locale }
-}) {
+  params: Promise<{ locale: Locale }>
+}
+
+export default async function LocaleLayout({ children, params }: Props) {
+  const { locale } = await params
   return (
-    <html lang={params.locale}>
+    <html lang={locale}>
       <body>
-        <Header locale={params.locale} />
+        <Header locale={locale} />
         <main className="pt-20 min-h-screen">{children}</main>
-        <Footer locale={params.locale} />
+        <Footer locale={locale} />
       </body>
     </html>
   )

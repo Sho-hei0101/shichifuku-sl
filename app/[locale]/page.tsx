@@ -151,9 +151,14 @@ async function getHomeData(locale: Locale) {
   return { properties, projects, posts }
 }
 
-export default async function HomePage({ params }: { params: { locale: Locale } }) {
-  const t = translations[params.locale]
-  const { properties, projects, posts } = await getHomeData(params.locale)
+type Props = {
+  params: Promise<{ locale: Locale }>
+}
+
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params
+  const t = translations[locale]
+  const { properties, projects, posts } = await getHomeData(locale)
 
   return (
     <>
@@ -164,7 +169,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
             {t.hero.title}
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 mb-12">{t.hero.subtitle}</p>
-          <Button href={`/${params.locale}/contact`}>{t.hero.cta}</Button>
+          <Button href={`/${locale}/contact`}>{t.hero.cta}</Button>
         </div>
       </section>
 
@@ -176,17 +181,17 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
             <Card
               title={t.business.trading.title}
               description={t.business.trading.desc}
-              href={`/${params.locale}/business/trading`}
+              href={`/${locale}/business/trading`}
             />
             <Card
               title={t.business.realEstate.title}
               description={t.business.realEstate.desc}
-              href={`/${params.locale}/business/real-estate`}
+              href={`/${locale}/business/real-estate`}
             />
             <Card
               title={t.business.football.title}
               description={t.business.football.desc}
-              href={`/${params.locale}/business/football`}
+              href={`/${locale}/business/football`}
             />
           </div>
         </div>
@@ -210,7 +215,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold">{t.properties.title}</h2>
-              <Button href={`/${params.locale}/properties`} variant="secondary">
+              <Button href={`/${locale}/properties`} variant="secondary">
                 {t.properties.viewAll}
               </Button>
             </div>
@@ -220,7 +225,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
                   key={property._id}
                   title={property.title}
                   description={`${property.location} • ${property.price?.toLocaleString()} ${property.currency}`}
-                  href={`/${params.locale}/properties/${property.slug.current}`}
+                  href={`/${locale}/properties/${property.slug.current}`}
                 />
               ))}
             </div>
@@ -234,7 +239,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold">{t.projects.title}</h2>
-              <Button href={`/${params.locale}/projects`} variant="secondary">
+              <Button href={`/${locale}/projects`} variant="secondary">
                 {t.projects.viewAll}
               </Button>
             </div>
@@ -243,7 +248,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
                 key={project._id}
                 title={project.title}
                 description={project.description}
-                href={`/${params.locale}/projects/${project.slug.current}`}
+                href={`/${locale}/projects/${project.slug.current}`}
                 className="max-w-4xl"
               />
             ))}
@@ -257,7 +262,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold">{t.blog.title}</h2>
-              <Button href={`/${params.locale}/blog`} variant="secondary">
+              <Button href={`/${locale}/blog`} variant="secondary">
                 {t.blog.viewAll}
               </Button>
             </div>
@@ -267,7 +272,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
                   key={post._id}
                   title={post.title}
                   description={post.excerpt || ''}
-                  href={`/${params.locale}/blog/${post.slug.current}`}
+                  href={`/${locale}/blog/${post.slug.current}`}
                 />
               ))}
             </div>
@@ -281,7 +286,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
           <h2 className="text-4xl md:text-5xl font-bold mb-12 whitespace-pre-line">
             {t.cta.title}
           </h2>
-          <Button href={`/${params.locale}/contact`} variant="secondary">
+          <Button href={`/${locale}/contact`} variant="secondary">
             {t.cta.button}
           </Button>
         </div>

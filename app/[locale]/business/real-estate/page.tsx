@@ -44,8 +44,13 @@ const translations = {
   },
 }
 
-export default function RealEstatePage({ params }: { params: { locale: Locale } }) {
-  const t = translations[params.locale]
+type Props = {
+  params: Promise<{ locale: Locale }>
+}
+
+export default async function RealEstatePage({ params }: Props) {
+  const { locale } = await params
+  const t = translations[locale]
 
   return (
     <div className="min-h-screen">
@@ -100,7 +105,7 @@ export default function RealEstatePage({ params }: { params: { locale: Locale } 
 
       <section className="py-24 px-6 bg-gray-50">
         <div className="max-w-4xl mx-auto text-center">
-          <Button href={`/${params.locale}/contact`}>{t.cta}</Button>
+          <Button href={`/${locale}/contact`}>{t.cta}</Button>
         </div>
       </section>
     </div>
