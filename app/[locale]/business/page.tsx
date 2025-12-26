@@ -37,8 +37,13 @@ const translations = {
   },
 }
 
-export default function BusinessPage({ params }: { params: { locale: Locale } }) {
-  const t = translations[params.locale]
+type Props = {
+  params: Promise<{ locale: Locale }>
+}
+
+export default async function BusinessPage({ params }: Props) {
+  const { locale } = await params
+  const t = translations[locale]
 
   return (
     <div className="min-h-screen">
@@ -55,17 +60,17 @@ export default function BusinessPage({ params }: { params: { locale: Locale } })
             <Card
               title={t.trading.title}
               description={t.trading.desc}
-              href={`/${params.locale}/business/trading`}
+              href={`/${locale}/business/trading`}
             />
             <Card
               title={t.realEstate.title}
               description={t.realEstate.desc}
-              href={`/${params.locale}/business/real-estate`}
+              href={`/${locale}/business/real-estate`}
             />
             <Card
               title={t.football.title}
               description={t.football.desc}
-              href={`/${params.locale}/business/football`}
+              href={`/${locale}/business/football`}
             />
           </div>
         </div>

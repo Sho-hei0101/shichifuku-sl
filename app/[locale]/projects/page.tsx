@@ -29,9 +29,14 @@ async function getProjects(locale: Locale) {
   )
 }
 
-export default async function ProjectsPage({ params }: { params: { locale: Locale } }) {
-  const t = translations[params.locale]
-  const projects = await getProjects(params.locale)
+type Props = {
+  params: Promise<{ locale: Locale }>
+}
+
+export default async function ProjectsPage({ params }: Props) {
+  const { locale } = await params
+  const t = translations[locale]
+  const projects = await getProjects(locale)
 
   return (
     <div className="min-h-screen">
@@ -53,7 +58,7 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
               {projects.map((project: any) => (
                 <Link
                   key={project._id}
-                  href={`/${params.locale}/projects/${project.slug.current}`}
+                  href={`/${locale}/projects/${project.slug.current}`}
                   className="glass rounded-2xl p-8 hover:shadow-xl transition"
                 >
                   <h3 className="text-2xl font-semibold mb-4">{project.title}</h3>

@@ -55,8 +55,13 @@ const translations = {
   },
 }
 
-export default function TermsPage({ params }: { params: { locale: Locale } }) {
-  const t = translations[params.locale]
+type Props = {
+  params: Promise<{ locale: Locale }>
+}
+
+export default async function TermsPage({ params }: Props) {
+  const { locale } = await params
+  const t = translations[locale]
 
   return (
     <div className="min-h-screen">
@@ -64,7 +69,7 @@ export default function TermsPage({ params }: { params: { locale: Locale } }) {
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold mb-6">{t.title}</h1>
           <p className="text-sm text-gray-600">
-            {t.lastUpdated}: {new Date().toLocaleDateString(params.locale)}
+            {t.lastUpdated}: {new Date().toLocaleDateString(locale)}
           </p>
         </div>
       </section>

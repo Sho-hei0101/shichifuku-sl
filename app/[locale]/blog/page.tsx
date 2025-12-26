@@ -42,15 +42,17 @@ async function getPosts(locale: Locale, category?: string) {
   )
 }
 
-export default async function BlogPage({
-  params,
-  searchParams,
-}: {
-  params: { locale: Locale }
-  searchParams: { category?: string }
-}) {
-  const t = translations[params.locale]
-  const posts = await getPosts(params.locale, searchParams.category)
+type Props = {
+  params: Promise<{ locale: Locale }>
+  searchParams?: Promise<{ category?: string }>
+}
+
+export default async function BlogPage({ params, searchParams }: Props) {
+  const { locale } = await params
+  const resolvedSearchParams = await searchParams
+  const category = resolvedSearchParams?.category
+  const t = translations[locale]
+  const posts = await getPosts(locale, category)
 
   return (
     <div className="min-h-screen">
@@ -67,9 +69,9 @@ export default async function BlogPage({
             {Object.entries(t.categories).map(([key, label]) => (
               <Link
                 key={key}
-                href={key === 'all' ? `/${params.locale}/blog` : `/${params.locale}/blog?category=${key}`}
+                href={key === 'all' ? `/${locale}/blog` : `/${locale}/blog?category=${key}`}
                 className={`px-6 py-2 rounded-full font-medium transition ${
-                  (key === 'all' && !searchParams.category) || searchParams.category === key
+                  (key === 'all' && !category) || category === key
                     ? 'bg-black text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
@@ -88,11 +90,11 @@ export default async function BlogPage({
               {posts.map((post: any) => (
                 <Link
                   key={post._id}
-                  href={`/${params.locale}/blog/${post.slug.current}`}
+                  href={`/${locale}/blog/${post.slug.current}`}
                   className="glass rounded-2xl p-6 hover:shadow-xl transition"
                 >
                   <p className="text-sm text-gray-500 mb-2">
-                    {new Date(post.publishedAt).toLocaleDateString(params.locale)}
+                    {new Date(post.publishedAt).toLocaleDateString(locale)}
                   </p>
                   <h3 className="text-xl font-semibold mb-3">{post.title}</h3>
                   {post.excerpt && <p className="text-gray-600 line-clamp-3">{post.excerpt}</p>}

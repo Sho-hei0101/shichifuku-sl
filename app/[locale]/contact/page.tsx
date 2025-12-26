@@ -39,8 +39,13 @@ const translations = {
   },
 }
 
-export default function ContactPage({ params }: { params: { locale: Locale } }) {
-  const t = translations[params.locale]
+type Props = {
+  params: Promise<{ locale: Locale }>
+}
+
+export default async function ContactPage({ params }: Props) {
+  const { locale } = await params
+  const t = translations[locale]
 
   return (
     <div className="min-h-screen">

@@ -32,13 +32,14 @@ async function getProject(slug: string, locale: Locale) {
   )
 }
 
-export default async function ProjectDetailPage({
-  params,
-}: {
-  params: { locale: Locale; slug: string }
-}) {
-  const t = translations[params.locale]
-  const project = await getProject(params.slug, params.locale)
+type Props = {
+  params: Promise<{ locale: Locale; slug: string }>
+}
+
+export default async function ProjectDetailPage({ params }: Props) {
+  const { locale, slug } = await params
+  const t = translations[locale]
+  const project = await getProject(slug, locale)
 
   if (!project) {
     notFound()
@@ -49,7 +50,7 @@ export default async function ProjectDetailPage({
       <article className="py-12 px-6">
         <div className="max-w-4xl mx-auto">
           <a
-            href={`/${params.locale}/projects`}
+            href={`/${locale}/projects`}
             className="inline-flex items-center text-gray-600 hover:text-black mb-8"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
